@@ -5,7 +5,7 @@ uses ronin.config.*
 uses ronin.console.AdminConsole
 //uses ronin.ws.RoninWebservicesFilter
 
-uses db.roblog.User
+//uses db.roblog.User
 uses controller.*
 
 class RoninConfig extends DefaultRoninConfig {

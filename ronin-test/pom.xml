@@ -12,6 +12,7 @@
     <groupId>org.gosu-lang.ronin</groupId>
     <artifactId>ronin-proj</artifactId>
     <version>0.9.3-SNAPSHOT</version>
+      <relativePath>../pom.xml</relativePath>
   </parent>
 
   <dependencies>

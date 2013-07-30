@@ -107,7 +107,7 @@ class RoninTest {
     using(request()) {
       url = URLUtil.urlFor(method)
     }
-    return get(url.substring("http://localhost".Length))
+    return get(url.substring("http://localhost".length))
   }
 
   /**
@@ -151,7 +151,7 @@ class RoninTest {
     using(request()) {
       url = URLUtil.urlFor(method)
     }
-    return post(url.substring("http://localhost".Length))
+    return post(url.substring("http://localhost".length))
   }
 
   /**
@@ -206,7 +206,7 @@ class RoninTest {
     using(request()) {
       url = URLUtil.urlFor(method)
     }
-    return put(url.substring("http://localhost".Length))
+    return put(url.substring("http://localhost".length))
   }
 
   /**
@@ -250,7 +250,7 @@ class RoninTest {
     using(request()) {
       url = URLUtil.urlFor(method)
     }
-    return delete(url.substring("http://localhost".Length))
+    return delete(url.substring("http://localhost".length))
   }
 
   /**
@@ -306,7 +306,7 @@ class RoninTest {
    */
   static function assertRedirectTo(response : TestHttpResponse, url : String) {
     assertRedirect(response)
-    Assert.assertEquals(url, response.Redirect.substring("http://localhost".Length))
+    Assert.assertEquals(url, response.Redirect.substring("http://localhost".length))
   }
 
   /**

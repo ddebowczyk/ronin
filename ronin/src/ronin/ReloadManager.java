@@ -26,7 +26,7 @@ class ReloadManager {
     scanForChanges(SOURCE_ROOT, updateResource);
     if (updateResource) {
       // acts on the current module's Gosu typeloader
-      TypeSystem.getGosuClassLoader().reloadChangedClasses();
+      //TypeSystem.getGosuClassLoader().reloadChangedClasses();
     }
   }
 
@@ -57,11 +57,11 @@ class ReloadManager {
     typeName = typeName.replace(File.separatorChar, '.');
     IType type = TypeSystem.getByFullNameIfValid(typeName);
     if (type != null) {
-      TypeSystem.refresh((ITypeRef) type, true);
+      TypeSystem.refresh((ITypeRef) type);
     }
     IFile iFile = CommonServices.getFileSystem().getIFile(file);
     if (iFile != null) {
-      TypeSystem.refresh(iFile);
+      //TypeSystem.refresh(iFile);
     }
   }
 

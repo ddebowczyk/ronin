@@ -158,7 +158,7 @@ class OpenID extends RoninController {
 
   private function getAssocHandle(provider : String) : AssocHandle {
     var assocHandle = Ronin.cache(\ -> fetchAssocHandle(provider), "__ronin_openid_${provider}", APPLICATION)
-    if(System.currentTimeMillis() > assocHandle.expires) {
+    if(System.currentTimeMillis() > assocHandle.Expires) {
       assocHandle = fetchAssocHandle(provider)
       Ronin.invalidate("__ronin_openid_${provider}", APPLICATION)
       assocHandle = Ronin.cache(\ -> assocHandle, "__ronin_openid_${provider}", APPLICATION)

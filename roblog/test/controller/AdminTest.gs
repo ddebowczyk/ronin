@@ -5,7 +5,7 @@ uses java.util.Date
 uses org.junit.*
 uses ronin.test.*
 
-uses db.roblog.*
+//uses db.roblog.*
 uses controller.AdminCx
 
 class AdminTest extends Assert {

@@ -136,9 +136,17 @@ class TestHttpResponse implements HttpServletResponse {
   override function getHeader(s : String) : String {
     return _headers[s]
   }
-  
+
   override function getHeaders(s : String) : Collection<String> {
     return {_headers[s]}
+  }
+
+  override function encodeURL(p0: String): String {
+    return null
+  }
+
+  override function encodeRedirectURL(p0: String): String {
+    return null
   }
 
   private class ServletStringStream extends ServletOutputStream {

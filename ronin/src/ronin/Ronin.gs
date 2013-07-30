@@ -47,7 +47,7 @@ class Ronin {
       log("No configuration was found at config.RoninConfig, using the default configuration...", :level=WARN)
     }
     Quartz.maybeStart()
-    ReloadManager.setSourceRoot(src)
+    //ReloadManager.setSourceRoot(src)
   }
 
   internal static property set CurrentRequest(req : RoninRequest) {
@@ -224,7 +224,7 @@ class Ronin {
    *  in development mode.
    */
   static function loadChanges() {
-    ReloadManager.detectAndReloadChangedResources() 
+    //ReloadManager.detectAndReloadChangedResources()
   }
 
 }

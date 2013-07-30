@@ -36,7 +36,7 @@
           <groupId>org.gosu-lang</groupId>
           <artifactId>maven-gosu-plugin</artifactId>
           <configuration>
-            <gosuVersion>0.9-8</gosuVersion>
+            <gosuVersion>0.10.2-SNAPSHOT</gosuVersion>
           </configuration>
         </plugin>
       </plugins>
