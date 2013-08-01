@@ -5,6 +5,7 @@ uses java.util.Date
 uses gw.config.*
 uses gw.lang.reflect.*
 uses gw.lang.parser.exceptions.*
+uses ronin.db.DatabaseFrontEnd
 
 /**
  *  Default implementation of {@link ronin.config.IParamConverter}.  Performs the usual conversions
@@ -15,7 +16,7 @@ class DefaultParamConverter implements IParamConverter {
 
   override function convertValue(paramType : Type, paramValue : String) : Object {
     if (paramType == boolean) {
-      return "on".equals(paramValue) or "true".equals(paramValue)
+      return "on" == paramValue or "true" == paramValue
     }
     if(not paramValue?.HasContent) {
       if(not paramType.Primitive) {
@@ -32,6 +33,8 @@ class DefaultParamConverter implements IParamConverter {
       case int:
       case Integer:
         return Integer.parseInt(paramValue)
+      case String:
+        return paramValue
       case long:
       case Long:
         return Long.parseLong(paramValue)
@@ -45,7 +48,8 @@ class DefaultParamConverter implements IParamConverter {
         return new Date(paramValue)
       default:
         try {
-          return CommonServices.getCoercionManager().convertValue(paramValue, paramType)
+          //return CommonServices.getCoercionManager().convertValue(paramValue, paramType)
+          return DatabaseFrontEnd.getInstance( paramType, paramValue )
         } catch (ex : IncompatibleTypeException ) {
           if(paramType?.Primitive || paramType?.Namespace?.startsWith('java')) {
             throw ex

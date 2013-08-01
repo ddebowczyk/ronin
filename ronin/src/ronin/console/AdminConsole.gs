@@ -51,7 +51,7 @@ class AdminConsole {
     }
     var address = serverSession.IoSession.RemoteAddress
     if(address typeis InetSocketAddress) {
-      return address.Address.AnyLocalAddress or address.Address.LoopbackAddress
+      return address.Address.isAnyLocalAddress() or address.Address.isLoopbackAddress()
     }
     return false
   }

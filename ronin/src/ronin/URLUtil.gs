@@ -7,6 +7,7 @@ uses gw.lang.reflect.features.*
 
 uses java.net.URLEncoder
 uses java.lang.StringBuilder
+uses ronin.db.DatabaseFrontEnd
 
 /**
  *  Utility class for URL generation.  Should not be used directly.
@@ -64,13 +65,7 @@ class URLUtil {
   }
 
   private static function getStringValue(argValue : Object) : String {
-    var stringValue : String
-    var idMethod = (typeof argValue).TypeInfo.getMethod("toId", {})
-    if(idMethod != null) {
-        return (idMethod.CallHandler.handleCall(argValue, {}) ?: "null") as String
-    } else {
-        return (argValue ?: "null") as String
-    }
+    return DatabaseFrontEnd.getId( argValue )
   }
 
   static function baseUrlFor(target : MethodReference) : String {

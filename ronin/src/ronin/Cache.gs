@@ -108,7 +108,7 @@ class Cache {
   /**
    *  An object responsible for storing and retrieving cached values.
    */
-  interface CacheStore {
+  public interface CacheStore {
 
     /**
      *  The read-write lock for this store.

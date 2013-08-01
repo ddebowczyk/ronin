@@ -24,6 +24,7 @@ uses ronin.templates.ShowDevException
 uses gw.lang.parser.exceptions.ParseResultsException
 uses ronin.templates.ShowDevParseResultsException
 uses gw.lang.parser.exceptions.ErrantGosuClassException
+uses ronin.db.DatabaseFrontEnd
 
 /**
  *  The default implementation of {@link ronin.config.IRoninConfig}.

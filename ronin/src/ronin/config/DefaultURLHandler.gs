@@ -3,6 +3,7 @@ package ronin.config
 uses ronin.*
 uses java.net.*
 uses gw.lang.reflect.*
+uses java.lang.IllegalStateException
 
 /**
  *  Default implementation of {@link ronin.config.IURLHandler}.  Looks up a type in the "controller"
@@ -16,12 +17,14 @@ class DefaultURLHandler implements IURLHandler {
     var controllerType = getControllerType(request)
     var action = getActionName(request)
     var actionMethod : IMethodInfo = null
-    if(Ronin.Mode != PRODUCTION) {
-      actionMethod = controllerType.TypeInfo.Methods.singleWhere(\ method -> method.Public and method.DisplayName == action)
-    } else {
-      actionMethod = controllerType.TypeInfo.Methods.firstWhere(\ method -> method.Public and method.DisplayName == action)
+    try{
+      if(Ronin.Mode != PRODUCTION) {
+        actionMethod = controllerType.TypeInfo.Methods.singleWhere(\ method -> method.Public and method.DisplayName == action)
+      } else {
+        actionMethod = controllerType.TypeInfo.Methods.firstWhere(\ method -> method.Public and method.DisplayName == action)
+      }
     }
-    if(actionMethod == null) {
+    catch(ex : IllegalStateException) {
       throw new FourOhFourException("Action ${action} not found.")
     }
     return actionMethod
