@@ -1,34 +1,23 @@
 package vark
 
-uses java.io.File
-uses java.lang.System
-uses java.lang.Class
-uses java.util.Iterator
-uses gw.util.Pair
-uses gw.vark.*
-uses gw.vark.annotations.*
-uses gw.vark.antlibs.*
-uses org.apache.tools.ant.types.FileSet
-uses org.apache.tools.ant.types.selectors.FileSelector
-uses org.apache.tools.ant.types.selectors.FilenameSelector
-uses org.apache.tools.ant.Location
-uses org.apache.maven.model.building.DefaultModelBuildingRequest
-uses org.apache.maven.model.building.ModelBuildingRequest
-uses org.apache.maven.model.building.DefaultModelBuilderFactory
-uses org.apache.maven.model.Model
+uses gw.vark.Aardvark
 uses gw.vark.aether.Aether
-uses org.sonatype.aether.artifact.Artifact
-uses org.sonatype.aether.util.artifact.DefaultArtifact
-uses org.sonatype.aether.repository.RemoteRepository
+uses gw.vark.annotations.Depends
+uses gw.vark.annotations.Target
+uses gw.vark.antlibs.Ant
+uses org.apache.maven.model.Model
 uses org.apache.tools.ant.types.Path
+uses org.sonatype.aether.artifact.Artifact
+uses org.sonatype.aether.repository.RemoteRepository
+uses org.sonatype.aether.util.artifact.DefaultArtifact
 
 enhancement RoninVarkTargets : gw.vark.AardvarkFile {
 
   static property get Pom( ) : Model {
     Aether.RemoteRepositories.addAll(
         {
-            new RemoteRepository("gosu-lang.org-snapshots", "default", "http://gosu-lang.org/repositories/m2/snapshots"),
-            new RemoteRepository("gosu-lang.org-releases", "default", "http://gosu-lang.org/repositories/m2/releases")
+            new RemoteRepository("gosu-lang.org-snapshots", "default", "http://gosu-lang.org/nexus/content/repositories/snapshots"),
+            new RemoteRepository("gosu-lang.org-releases", "default", "http://gosu-lang.org/nexus/content/repositories/snapshots")
         })
     return Aether.Workspace.importModule(gw.vark.AardvarkFile.file("pom.xml"))
   }
