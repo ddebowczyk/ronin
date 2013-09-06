@@ -1,5 +1,5 @@
 <%@ extends ronin.RoninTemplate %>
-<%@ params(posts : List<db.roblog.Post>, eachPost(post : db.roblog.Post), prevLink : java.lang.Boolean, page : java.lang.Integer) %>
+<%@ params(posts : List<db.Post>, eachPost(post : db.Post), prevLink : java.lang.Boolean, page : java.lang.Integer) %>
 <% uses controller.* %>
 
 <% posts.each(\ post -> eachPost(post)) %>

@@ -26,6 +26,7 @@ import org.eclipse.jetty.webapp.WebAppContext;
 import org.h2.server.web.WebServer;
 import org.junit.runner.Result;
 import org.slf4j.LoggerFactory;
+import ronin.db.DatabaseFrontEnd;
 
 import java.io.File;
 import java.io.FileDescriptor;
@@ -64,9 +65,6 @@ public class DevServer {
 
       int port = Integer.parseInt(args[1]);
       String root = args[2];      
-      if ("server".equals(args[0])) {
-        startH2(args[2]);
-      }
       startJetty(port, root);
       log("");
       log("Your Ronin App is listening at http://localhost:8080");
@@ -98,9 +96,6 @@ public class DevServer {
       String root = args[2];
       resetDb(root);
       startJetty(port, root);
-      if ("server".equals(args[0])) {
-        startH2(args[2]);
-      }
       TestScanner scanner = new TestScanner(new File(root, "test"));
       log("Running tests...");
       log("Environment properties are: " + new RoninServletWrapper().getEnvironmentProperties(new File(root)));

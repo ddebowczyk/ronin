@@ -1,13 +1,30 @@
 <%@ extends ronin.RoninTemplate %>
 <%@ params(title : String, content()) %>
-<% uses db.roblog.BlogInfo %>
+<% uses db.* %>
 <% uses controller.* %>
+<% uses org.hibernate.HibernateException %>
 
 <html>
   <head>
     <link href="/public/blog.css" rel="stylesheet" type="text/css">
     <meta http-equiv="X-XRDS-Location" content="${urlFor(OpenID#xrds())}"/>
-    <% var blogTitle = BlogInfo.selectAll().first()?.Title ?: "" %>
+    <%
+      var blogTitle = ""
+      try {
+        var ses = DatabaseFrontEndImpl.currentSession()
+        ses.beginTransaction()
+        var query = ses.createQuery("from BlogInfo")
+        query.setMaxResults(1)
+        if(!query.list().Empty) {
+          blogTitle = (query.list().get(0) as BlogInfo).Title
+        }
+        ses.getTransaction().commit()
+        DatabaseFrontEndImpl.closeSession()
+      }  catch (e : HibernateException ) {
+        DatabaseFrontEndImpl.rollback();
+        throw e
+      }
+     %>
     <title>${blogTitle} : ${h(title)}</title>
   </head>
   <body>

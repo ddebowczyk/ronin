@@ -1,10 +1,15 @@
 package controller
 
-uses db.roblog.Post
-uses db.roblog.BlogInfo
-uses db.roblog.User
-uses ronin.RoninController
+uses db.BlogInfo
+uses db.DatabaseFrontEndImpl
+uses db.Post
+uses db.User
+uses org.hibernate.HibernateException
 uses ronin.NoAuth
+uses ronin.RoninController
+
+uses java.lang.System
+uses java.sql.Timestamp
 
 class AdminCx extends RoninController {
 
@@ -17,31 +22,79 @@ class AdminCx extends RoninController {
   }
 
   function deletePost(post : Post) {
-    post.delete()
+    try{
+      var ses = DatabaseFrontEndImpl.currentSession()
+      ses.beginTransaction()
+      ses.createQuery("delete from Comment c where c.commentPost = " + post.Id).executeUpdate()
+      var res = ses.get("db.Post", post.Id)
+      ses.delete(res)
+      ses.getTransaction().commit()
+      DatabaseFrontEndImpl.closeSession()
+    } catch (e : HibernateException ) {
+      DatabaseFrontEndImpl.rollback();
+      throw e
+    }
     redirect(PostCx#recent(0))
   }
 
   function savePost(post : Post) {
-    if(post.New) {
-      post.Posted = new java.sql.Timestamp(java.lang.System.currentTimeMillis())
+    try {
+      post.Posted = new Timestamp(System.currentTimeMillis())
+      if(post.Title != null && post.Title.length > Post.titleLength ) {
+        post.Title = post.Title.substring(0, Post.titleLength)
+      }
+      post.Body = post.Body == null ? "" : post.Body
+      var ses = DatabaseFrontEndImpl.currentSession()
+      ses.beginTransaction()
+      if(post.Id == null) {
+        ses.save(post)
+      } else {
+        ses.update(post)
+      }
+      ses.getTransaction().commit()
+      DatabaseFrontEndImpl.closeSession()
+    } catch (e : HibernateException ) {
+       DatabaseFrontEndImpl.rollback();
+       throw e
     }
-    post.update()
     redirect(PostCx#viewPost(post))
   }
 
   function setup() {
-    var blogInfos = BlogInfo.selectAll()
     var blogInfo : BlogInfo
-    if(blogInfos.HasElements) {
-      blogInfo = blogInfos.first()
-    } else {
-      blogInfo = new BlogInfo()
+    try {
+      var ses = DatabaseFrontEndImpl.currentSession()
+      ses.beginTransaction()
+      var query = ses.createQuery("from BlogInfo")
+      query.setMaxResults(1)
+      if(!query.list().Empty) {
+        blogInfo = query.list().get(0) as BlogInfo
+      } else {
+        blogInfo = new BlogInfo()
+      }
+      ses.getTransaction().commit()
+      DatabaseFrontEndImpl.closeSession()
+    } catch (e : HibernateException ) {
+      DatabaseFrontEndImpl.rollback();
+      throw e
     }
     view.Layout.render(Writer, "Setup", \ -> view.Setup.render(Writer, blogInfo))
   }
 
   function editInfo(blogInfo : BlogInfo) {
-    blogInfo.update()
+    if(blogInfo.Title != null && blogInfo.Title.length > BlogInfo.titleLength ) {
+      blogInfo.Title = blogInfo.Title.substring(0, BlogInfo.titleLength)
+    }
+    try {
+      var ses = DatabaseFrontEndImpl.currentSession()
+      ses.beginTransaction()
+      ses.update(blogInfo)
+      ses.getTransaction().commit()
+      DatabaseFrontEndImpl.closeSession()
+    } catch (e : HibernateException ) {
+      DatabaseFrontEndImpl.rollback();
+      throw e
+    }
     redirect(#setup())
   }
 
@@ -65,9 +118,21 @@ class AdminCx extends RoninController {
   }
 
   function createUser(name : String, pass : String) {
+    if(name != null && name.length > User.nameLength ) {
+      name = name.substring(0, User.nameLength)
+    }
     var hashAndSalt = AuthManager.getPasswordHashAndSalt(pass)
     var user = new User() {:Name = name, :Hash = hashAndSalt.First, :Salt = hashAndSalt.Second}
-    user.update()
+    try {
+      var ses = DatabaseFrontEndImpl.currentSession()
+      ses.beginTransaction()
+      ses.save(user)
+      ses.getTransaction().commit()
+      DatabaseFrontEndImpl.closeSession()
+    } catch (e : HibernateException ) {
+      DatabaseFrontEndImpl.rollback();
+      throw e
+    }
     redirect(#login())
   }
 

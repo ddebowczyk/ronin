@@ -1,32 +1,47 @@
 package controller
 
+uses db.DatabaseFrontEndImpl
+uses db.Post
+uses org.hibernate.HibernateException
+uses org.junit.BeforeClass
+uses org.junit.Test
+uses ronin.RoninTestBase
+uses ronin.db.DatabaseFrontEnd
+uses ronin.test.RoninTest
+
+uses java.lang.Long
 uses java.util.Date
+uses java.util.List
 
-uses org.junit.*
-uses ronin.test.*
-
-//uses db.roblog.*
-uses controller.AdminCx
-
-class AdminTest extends Assert {
-
+class AdminTest extends RoninTestBase {
   static var posts : List<Post>
 
   @BeforeClass static function initSampleData() {
-    Post.selectAll().each(\p -> p.delete())
-    posts = {
-      new() {
-        :Title = "Post 1",
-        :Body = "Post 1 body",
-        :Posted = Date.Yesterday
-      },
-      new() {
-        :Title = "Post 2",
-        :Body = "Post 2 body",
-        :Posted = Date.Today
+    DatabaseFrontEnd.startDB()
+    try{
+      var ses = DatabaseFrontEndImpl.currentSession()
+      ses.beginTransaction()
+      ses.createQuery("delete from Comment").executeUpdate()
+      ses.createQuery("delete from Post").executeUpdate()
+      posts = {
+          new Post() {
+              :Title = "Post 1",
+              :Body = "Post 1 body",
+              :Posted = Date.Yesterday
+          },
+          new Post() {
+              :Title = "Post 2",
+              :Body = "Post 2 body",
+              :Posted = Date.Today
+          }
       }
+      posts.each(\p -> ses.save(p))
+      ses.getTransaction().commit()
+      DatabaseFrontEndImpl.closeSession()
+    } catch (e : HibernateException ) {
+      DatabaseFrontEndImpl.rollback();
+      throw e
     }
-    posts.each(\p -> p.update());
   }
 
   @Test function testEditPost() {
@@ -43,11 +58,20 @@ class AdminTest extends Assert {
         :Body = "new post body",
         :Posted = Date.Today
       }
-      p.update()
-      var pre = Post.countAll()
+      try {
+        var ses = DatabaseFrontEndImpl.currentSession()
+        ses.beginTransaction()
+        ses.save(p)
+        ses.getTransaction().commit()
+        DatabaseFrontEndImpl.closeSession()
+      } catch (e : HibernateException ) {
+        DatabaseFrontEndImpl.rollback();
+        throw e
+      }
+      var pre = countPosts()
       RoninTest.post(AdminCx#deletePost(p))
-      assertEquals(pre - 1, Post.countAll())
-      assertFalse(Post.selectAll().toList().contains(p))
+      assertEquals(pre - 1,countPosts())
+      assertFalse(DatabaseFrontEnd.getInstance(Post.Type, p.Id.toString()) != null)
     }, :userName = "admin")
   }
 
@@ -55,11 +79,26 @@ class AdminTest extends Assert {
     RoninTest.doAs(:action = \ -> {
       posts[0].Body = "edited post 1 body"
       RoninTest.post("/AdminCx/savePost", {
-        "post" -> {posts[0].id as String},
+        "post" -> {posts[0].Id as String},
         "post.Body" -> {posts[0].Body}
       })
-      assertEquals(posts[0].Body, Post.fromId(posts[0].id).Body)
+      assertEquals(posts[0].Body, (DatabaseFrontEnd.getInstance(Post.Type, Long.toString(posts[0].Id)) as Post).Body)
     }, :userName = "admin")
   }
 
+  private function countPosts() : int {
+    var count = 0
+    try {
+      var ses = DatabaseFrontEndImpl.currentSession()
+      ses.beginTransaction()
+      var query = ses.createQuery("select count(*) from Post")
+      count = (query.uniqueResult() as Long).intValue()
+      ses.getTransaction().commit()
+      DatabaseFrontEndImpl.closeSession()
+    } catch (e : HibernateException ) {
+      DatabaseFrontEndImpl.rollback();
+      throw e
+    }
+    return count
+  }
 }

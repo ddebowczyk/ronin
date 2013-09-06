@@ -3,17 +3,13 @@ package ronin.test
 uses ronin.*
 uses ronin.config.*
 
-uses java.io.IOException
-uses java.util.Arrays
 uses java.util.Map
 uses java.lang.*
 
 uses org.junit.Assert
 
-uses gw.lang.*
 uses gw.lang.reflect.features.MethodReference
 
-uses javax.servlet.ServletException
 uses javax.servlet.http.HttpServletRequest
 uses javax.servlet.http.HttpServletResponse
 uses org.apache.commons.fileupload.servlet.*
@@ -59,6 +55,10 @@ class RoninTest {
   static var _authMgr : IAuthManager
 
   static var _https = new ThreadLocal<Boolean>()
+
+  public static function initServlet() {
+    _servlet.get()
+  }
 
   static function handle(url : String, params : Map<String, String[]>, content : String, contentType : String, method : HttpMethod, files : Map<String, byte[]>, authentic : boolean = true, scheme : String = "http") : TestHttpResponse {
     _servlet.get()

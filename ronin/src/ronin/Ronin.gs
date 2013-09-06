@@ -1,11 +1,11 @@
 package ronin
 
-uses gw.util.concurrent.LockingLazyVar
 uses gw.lang.reflect.*
 uses java.lang.*
 uses java.io.*
 uses ronin.config.*
 uses org.slf4j.*
+uses ronin.db.DatabaseFrontEnd
 
 /**
  *  The central location for Ronin utility methods.  Controllers and templates should generally access the
@@ -34,6 +34,7 @@ class Ronin {
       if(ctor == null) {
         throw "config.RoninConfig must have a constructor with the same signature as ronin.config.RoninConfig"
       }
+      DatabaseFrontEnd.startDB();
       _CONFIG = ctor.Constructor.newInstance({m, servlet}) as IRoninConfig
     } else {
       _CONFIG = new DefaultRoninConfig(m, servlet)

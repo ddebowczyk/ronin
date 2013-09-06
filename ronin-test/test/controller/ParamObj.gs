@@ -20,4 +20,8 @@ class ParamObj {
       return propA
   }
 
+  function toString() : String {
+    return propA
+  }
+
 }

@@ -122,7 +122,7 @@
         <groupId>org.gosu-lang</groupId>
         <artifactId>maven-gosu-plugin</artifactId>
         <configuration>
-          <gosuVersion>0.10.2-SNAPSHOT</gosuVersion>
+          <gosuVersion>0.10.2</gosuVersion>
         </configuration>
       </plugin>
     </plugins>

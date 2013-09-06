@@ -1,8 +1,5 @@
 package ronin
 
-uses gw.lang.parser.*
-uses gw.lang.parser.expressions.*
-uses gw.lang.reflect.*
 uses gw.lang.reflect.features.*
 
 uses java.net.URLEncoder
@@ -65,7 +62,7 @@ class URLUtil {
   }
 
   private static function getStringValue(argValue : Object) : String {
-    return DatabaseFrontEnd.getId( argValue )
+    return DatabaseFrontEnd.getId( argValue ) ?: argValue.toString()
   }
 
   static function baseUrlFor(target : MethodReference) : String {

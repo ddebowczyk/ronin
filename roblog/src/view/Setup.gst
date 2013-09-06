@@ -1,15 +1,14 @@
 <%@ extends ronin.RoninTemplate %>
-<%@ params(blogInfo : db.roblog.BlogInfo) %>
-<% uses db.roblog.BlogInfo
-   uses controller.* %>
+<%@ params(blogInfo : db.BlogInfo) %>
+<% uses controller.* %>
 
 <html>
   <title>${Strings.SetupTitle}</title>
   <body>
-  <% using(target(AdminCx#editInfo(db.roblog.BlogInfo))) { %>
+  <% using(target(AdminCx#editInfo(db.BlogInfo))) { %>
     <form method="post" action="${TargetURL}">
-      <% if(not blogInfo.New) { %>
-          <input type="hidden" name="${n(blogInfo)}" value="${blogInfo.id}">
+      <% if(blogInfo.Id != null) { %>
+          <input type="hidden" name="${n(blogInfo)}" value="${blogInfo.Id}">
       <% } %>
       ${Strings.BlogTitle}: <input type="text" name="${n(blogInfo#Title)}" value="${blogInfo.Title ?: ""}"><br>
       <input type="submit">

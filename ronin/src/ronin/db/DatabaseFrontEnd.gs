@@ -3,7 +3,7 @@ package ronin.db
 uses gw.lang.reflect.TypeSystem
 uses gw.lang.reflect.IType
 
-class DatabaseFrontEnd {
+public class DatabaseFrontEnd {
   static var DB : DatabaseFrontEnd
   var _db : IDatabaseFrontEnd
 
@@ -27,6 +27,10 @@ class DatabaseFrontEnd {
 
   static function getInstance( type: IType, id: String ) : Object {
     return instance().get().getInstance( type, id )
+  }
+
+  static function startDB() {
+    instance().get().startDB()
   }
 
   private function get() : IDatabaseFrontEnd {

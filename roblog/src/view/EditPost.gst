@@ -1,12 +1,11 @@
 <%@ extends ronin.RoninTemplate %>
-<%@ params(post : db.roblog.Post) %>
+<%@ params(post : db.Post) %>
 <% uses controller.* %>
-<% uses db.roblog.Post %>
 
-<% using(target(AdminCx#savePost(db.roblog.Post))) { %>
+<% using(target(AdminCx#savePost(db.Post))) { %>
   <form method="post" action="${TargetURL}">
-    <% if(not post.New) { %>
-        <input type="hidden" name="${n(post)}" value="${post.id}">
+    <% if(post.Id != null) { %>
+        <input type="hidden" name="${n(post)}" value="${post.Id}">
     <% } %>
     <input type="text" name="${n(post#Title)}" value="${h(post.Title)}"><br>
     <textarea name="${n(post#Body)}" rows=20 columns=80>${h(post.Body)}</textarea><br>

@@ -7,7 +7,7 @@ uses org.junit.runners.Suite.SuiteClasses
 @RunWith(Suite)
 @SuiteClasses({
   controller.AdminTest,
-  controller.LoginTest,
+  //controller.LoginTest,
   controller.PostTest
 })
 class RoblogSuite {}

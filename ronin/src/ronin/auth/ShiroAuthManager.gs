@@ -1,12 +1,7 @@
 package ronin.auth
 
-uses ronin.Ronin
 uses ronin.config.*
-uses java.lang.*
-uses java.util.*
 uses gw.util.Pair
-uses gw.lang.reflect.features.PropertyReference
-uses javax.servlet.*
 uses org.apache.shiro.SecurityUtils
 uses org.apache.shiro.UnavailableSecurityManagerException
 uses org.apache.shiro.mgt.SecurityManager
@@ -17,6 +12,7 @@ uses org.apache.shiro.crypto.SecureRandomNumberGenerator
 uses org.apache.shiro.crypto.hash.SimpleHash
 uses org.apache.shiro.util.ThreadContext
 uses org.apache.shiro.realm.AuthorizingRealm
+uses org.apache.shiro.subject.Subject
 
 /**
  *  Default implemenation of {@link ronin.config.IAuthManager}.
@@ -39,7 +35,19 @@ class ShiroAuthManager implements IAuthManager {
   }
 
   override property get CurrentUserName() : String {
-    var subject = SecurityUtils.getSubject()
+    var subject : Subject
+    try {
+      subject = SecurityUtils.getSubject()
+    } catch (e : UnavailableSecurityManagerException) {
+      if(ThreadContext.getSecurityManager() == null) {
+        ThreadContext.bind(_consoleSM)
+        try {
+          return CurrentUserName
+        } finally {
+          ThreadContext.unbindSecurityManager()
+        }
+      }
+    }
     if(subject.Authenticated) {
       var principal = subject.Principals.asList()[0]
       if(principal typeis ShiroPrincipalCollection) {
@@ -52,7 +60,19 @@ class ShiroAuthManager implements IAuthManager {
   }
 
   override property get CurrentUser() : Object {
-    var subject = SecurityUtils.getSubject()
+    var subject : Subject
+    try {
+      subject = SecurityUtils.getSubject()
+    } catch (e : UnavailableSecurityManagerException) {
+      if(ThreadContext.getSecurityManager() == null) {
+        ThreadContext.bind(_consoleSM)
+        try {
+          return CurrentUser
+        } finally {
+          ThreadContext.unbindSecurityManager()
+        }
+      }
+    }
     if(subject.Authenticated) {
       var principal = subject.Principals.asList()[0]
       if(principal typeis ShiroPrincipalCollection) {
@@ -65,7 +85,19 @@ class ShiroAuthManager implements IAuthManager {
   }
 
   override function currentUserHasRole(role : String) : boolean {
-    var subject = SecurityUtils.getSubject()
+    var subject : Subject
+    try {
+      subject = SecurityUtils.getSubject()
+    } catch (e : UnavailableSecurityManagerException) {
+      if(ThreadContext.getSecurityManager() == null) {
+        ThreadContext.bind(_consoleSM)
+        try {
+          return currentUserHasRole(role)
+        } finally {
+          ThreadContext.unbindSecurityManager()
+        }
+      }
+    }
     return subject.Authenticated ? subject.hasRole(role) : false
   }
 

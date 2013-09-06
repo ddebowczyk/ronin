@@ -32,7 +32,7 @@ enhancement RoninVarkTargets : gw.vark.AardvarkFile {
   }
 
   function gosu() : Artifact {
-    return new DefaultArtifact("org.gosu-lang.gosu", "gosu-core", "jar", "0.10.2-SNAPSHOT")
+    return new DefaultArtifact("org.gosu-lang.gosu", "gosu-core", "jar", "0.10.2")
   }
 
   /* Compiles any Java classes */
