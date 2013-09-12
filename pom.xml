@@ -27,6 +27,7 @@
     <connection>scm:git:git@github.com:gosu-lang/ronin.git</connection>
     <url>scm:git:git@github.com:gosu-lang/ronin.git</url>
     <developerConnection>scm:git:git@github.com:gosu-lang/ronin.git</developerConnection>
+    <tag>HEAD</tag>
   </scm>
 
   <build>
