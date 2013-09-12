@@ -3,7 +3,7 @@
 
   <groupId>org.gosu-lang.ronin</groupId>
   <artifactId>roblog</artifactId>
-  <version>0.9.3-SNAPSHOT</version>
+  <version>0.9.4-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>Roblog Test Application</name>
@@ -12,7 +12,7 @@
     <groupId>org.gosu-lang</groupId>
     <artifactId>gosu-project-parent</artifactId>
     <version>4</version>
-    <relativePath/>
+    <relativePath />
   </parent>
 
   <repositories>
