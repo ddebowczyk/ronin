@@ -12,7 +12,6 @@ import gw.util.GosuClassUtil;
 import gw.util.Pair;
 import jline.Terminal;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.filefilter.SuffixFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.commons.io.output.NullOutputStream;
@@ -26,7 +25,6 @@ import org.eclipse.jetty.webapp.WebAppContext;
 import org.h2.server.web.WebServer;
 import org.junit.runner.Result;
 import org.slf4j.LoggerFactory;
-import ronin.db.DatabaseFrontEnd;
 
 import java.io.File;
 import java.io.FileDescriptor;
