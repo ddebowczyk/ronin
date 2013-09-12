@@ -64,7 +64,7 @@
     <dependency>
       <groupId>org.gosu-lang.goson</groupId>
       <artifactId>goson</artifactId>
-      <version>0.2-SNAPSHOT</version>
+      <version>0.2</version>
     </dependency>
     <dependency>
       <groupId>jline</groupId>
